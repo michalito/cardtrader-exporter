@@ -2,6 +2,7 @@ import os
 import requests
 import pandas as pd
 from datetime import datetime
+import re
 
 # Get the API token from the environment variable
 API_TOKEN = os.getenv('API_TOKEN')
@@ -128,6 +129,12 @@ for game_id, file_name in game_files_mapping.items():
     columns_to_drop = [col for col in df_game.columns if any(col.startswith(prefix) for prefix in prefixes)]
     df_game = df_game.drop(columns=columns_to_drop, errors='ignore')
     
+    # Specific transformation for Flesh And Blood (game_id 6)
+    if game_id == 6 and 'name' in df_game.columns:
+        df_game['name_powertools'] = df_game['name'].apply(lambda x: re.sub(r' - (.*)$', r' (\1)', x))
+        if 'fab_foil_new' in df_game.columns:
+            df_game['name_powertools'] = df_game.apply(lambda row: f"{row['name_powertools']} ({row['fab_foil_new']})" if pd.notna(row['fab_foil_new']) else row['name_powertools'], axis=1)
+
     # Export the filtered and modified DataFrame to CSV
     df_game.to_csv(file_name, index=False)
     print(f"Products for game_id {game_id} exported successfully to {file_name}")
