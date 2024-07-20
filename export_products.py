@@ -115,6 +115,11 @@ for game_id, file_name in game_files_mapping.items():
     # Filter products for the specific game
     df_game = df_products[df_products['game_id'] == game_id]
     
+    # Skip exporting if there are no products for the specific game
+    if df_game.empty:
+        print(f"No products found for game_id {game_id}, skipping export.")
+        continue
+    
     # Remove specified columns
     df_game = df_game.drop(columns=columns_to_remove, errors='ignore')
     

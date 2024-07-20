@@ -73,6 +73,10 @@ The application generates the following output files, saved in the `exports` dir
 6. `products_lorcana_<date>.csv`: Lorcana specific product export.
 7. `products_swu_<date>.csv`: Star Wars Unlimited specific product export.
 
+### Note
+
+If there are no products listed for a specific game, the application will skip generating the CSV file for that game.
+
 ### Features in Detail
 
 - **Fetching and Exporting Data**: The application uses the CardTrader API to fetch product and expansion data and exports this data into CSV files, formatted for import into TCGPowerTools or other applications.
