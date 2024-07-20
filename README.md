@@ -25,7 +25,7 @@ This project is a Python application designed to export product and expansion da
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/your-username/cardtrader-exporter.git
+   git clone https://github.com/michalito/cardtrader-exporter.git
    cd cardtrader-exporter
    ```
 
