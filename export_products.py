@@ -121,6 +121,9 @@ for game_id, file_name in game_files_mapping.items():
         print(f"No products found for game_id {game_id}, skipping export.")
         continue
     
+    # Retrieve bundle_size column before removing columns
+    bundle_size_series = df_game['bundle_size'].copy() if 'bundle_size' in df_game.columns else pd.Series([False]*len(df_game), index=df_game.index)
+
     # Remove specified columns
     df_game = df_game.drop(columns=columns_to_remove, errors='ignore')
     
@@ -134,6 +137,10 @@ for game_id, file_name in game_files_mapping.items():
         df_game['name_powertools'] = df_game['name'].apply(lambda x: re.sub(r' - (.*)$', r' (\1)', x))
         if 'fab_foil_new' in df_game.columns:
             df_game['name_powertools'] = df_game.apply(lambda row: f"{row['name_powertools']} ({row['fab_foil_new']})" if pd.notna(row['fab_foil_new']) else row['name_powertools'], axis=1)
+
+    # Add playset column for Magic: The Gathering (game_id 1)
+    if game_id == 1:
+        df_game['playset'] = bundle_size_series.apply(lambda x: True if x == 4 else False)
 
     # Export the filtered and modified DataFrame to CSV
     df_game.to_csv(file_name, index=False)
